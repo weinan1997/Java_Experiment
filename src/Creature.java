@@ -1,8 +1,8 @@
 public class Creature {
-    private Position position;
-    public void report() {
-
+    public boolean Greater(Creature another){
+        return false;
     }
+    private Position position;
     public void setPosition(Position position) {
         this.position = position;
     }

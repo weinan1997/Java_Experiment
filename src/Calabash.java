@@ -1,4 +1,4 @@
-public class Calabash extends Creature {
+public class Calabash extends Creature{
     private COLOR color;
     private SENIORITY seniority;
     Calabash(COLOR color, SENIORITY seniority) {
@@ -10,9 +10,16 @@ public class Calabash extends Creature {
         return seniority;
     }
 
-    @Override
     public void report() {
 
+    }
+
+    @Override
+    public boolean Greater(Creature brother) {
+        if(brother instanceof Calabash)
+            return this.getSeniority().ordinal() > ((Calabash) brother).getSeniority().ordinal();
+        else
+            return false;
     }
 }
 

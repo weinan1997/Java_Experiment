@@ -1,10 +1,17 @@
 public class Position {
     private int x;
     private int y;
-    private Creature creature;
+    private Creature creature = null;
     Position(int x, int y, Creature creature) {
         this.x = x;
         this.y = y;
+        this.creature = creature;
+    }
+    Position(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+    Position(Creature creature) {
         this.creature = creature;
     }
     public int getX() {
@@ -24,5 +31,11 @@ public class Position {
     }
     public void setCreature(Creature creature) {
         this.creature = creature;
+    }
+    public boolean isEmpty() {
+        if(this.creature == null)
+            return true;
+        else
+            return false;
     }
 }
