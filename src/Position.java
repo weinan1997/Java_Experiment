@@ -1,4 +1,4 @@
-public class Position {
+public class Position implements Comparable<Position>{
     private int x;
     private int y;
     private Creature creature = null;
@@ -37,5 +37,15 @@ public class Position {
             return true;
         else
             return false;
+    }
+
+    @Override
+    public int compareTo(Position position) {
+        return this.getY() - position.getY();
+    }
+
+    @Override
+    public String toString() {
+        return "(" + this.x + ", " + this.y + ")";
     }
 }

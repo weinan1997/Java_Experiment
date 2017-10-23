@@ -1,9 +1,10 @@
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class BattleGround {
     private Position maps[][];      //a map that is created for fighting
     //When BattleGround created, the map will be initialized
-    private int N;      //size of battleground
+    private int N = 20;      //size of battleground
     private Calabash[] brothers;        //HuLu brothers
     BattleGround(int N) {
         for(int i = 0; i < N; i++)
@@ -18,29 +19,24 @@ public class BattleGround {
         return maps;
     }
 
-    BattleGround(int N, Scorpion scorpion, Snake snake,Grandpa grandpa, Minion[] minions, Calabash[] brothers) {
-        this.maps = new Position[N][N];
+    BattleGround(int N, Snake snake,Grandpa grandpa, Queue monsters, Queue brothers) {
+        maps = new Position[N][N];
         for(int i = 0; i < N; i++)
             for(int j = 0; j < N; j++)
                 maps[i][j] = new Position(i, j, null);
-        putCreature(scorpion, findEmptyPosition());
         putCreature(snake, findEmptyPosition());
         putCreature(grandpa, findEmptyPosition());
-        for(int i = 0; i < minions.length; i++)
-            putCreature(minions[i], findEmptyPosition());
-        for(int i = 0; i < brothers.length; i++)
-            putCreature(brothers[i], findEmptyPosition());
     }
 
     //Find empty position
     private Position findEmptyPosition() {
-        Random random = new Random();
+        Random random = ThreadLocalRandom.current();
         Position temp;
         do {
             int i = random.nextInt(N);
             int j = random.nextInt(N);
             temp = maps[i][j];
-        }while (temp.isEmpty() == true);
+        }while (temp.isEmpty() == false);
         return temp;
     }
 
@@ -54,7 +50,8 @@ public class BattleGround {
         return true;
     }
 
-    private void ChangShe(Creature[] creatures) {
+    private void ChangShe(Queue queue) {
+        Creature[] creatures = queue.getCreatures();
         Random random = new Random();
         int i;
         int j;
@@ -67,7 +64,8 @@ public class BattleGround {
     }
 
     //creatures.length % 2 == 1
-    private void HeYi(Creature[] creatures) {
+    private void HeYi(Queue queue) {
+        Creature[] creatures = queue.getCreatures();
         Random random = new Random();
         int i;
         int j;
@@ -81,7 +79,8 @@ public class BattleGround {
             putCreature(creatures[s], maps[i + creatures.length - s - 1][j + s]);
     }
 
-    private void YanXing(Creature[] creatures) {
+    private void YanXing(Queue queue) {
+        Creature[] creatures = queue.getCreatures();
         Random random = new Random();
         int i;
         int j;
@@ -93,7 +92,8 @@ public class BattleGround {
             putCreature(creatures[s], maps[i + creatures.length - 1 -s][j + s]);
     }
 
-    private void ChongE(Creature[] creatures) {
+    private void ChongE(Queue queue) {
+        Creature[] creatures = queue.getCreatures();
         Random random = new Random();
         int i;
         int j;
@@ -105,14 +105,44 @@ public class BattleGround {
             putCreature(creatures[s], maps[i + s][j + (s % 2)]);
     }
 
-
-
     private void putCreature(Creature creature, Position position) {
         position.setCreature(creature);
         creature.setPosition(position);
     }
 
     public static void main(String args[]) {
+        Snake snake = new Snake();
+        Grandpa grandpa = new Grandpa();
+        Creature[] minions = new Creature[7];
+        minions[0] = new Scorpion();
+        for(int i = 1; i < minions.length; i++)
+            minions[i] = new Minion();
+        Calabash[] calabashes = new Calabash[7];
+        for(int i = 0; i < calabashes.length; i ++)
+            calabashes[i] = new Calabash(COLOR.values()[i], SENIORITY.values()[i]);
+        Queue monsters = new Queue(minions);
+        Queue brothers = new Queue(calabashes);
 
+        BattleGround battle1 = new BattleGround(20, snake, grandpa, monsters, brothers);
+        brothers.shuffle();
+        new BubbleSort().sort(brothers);
+
+        System.out.println("Round 1:");
+        battle1.ChangShe(brothers);
+        brothers.queuqReport();
+        battle1.HeYi(monsters);
+        monsters.queuqReport();
+        snake.report();
+        grandpa.report(battle1);
+
+        BattleGround battle2 = new BattleGround(20, snake, grandpa, monsters, brothers);
+        System.out.println("\n\n\nRound 2:");
+        battle2.ChangShe(brothers);
+        battle2.ChongE(monsters);
+        brothers.queuqReport();
+        monsters.queuqReport();
+        snake.report();
+        grandpa.report(battle2);
+        return;
     }
 }

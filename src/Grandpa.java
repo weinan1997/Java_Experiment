@@ -1,16 +1,13 @@
 public class Grandpa extends Creature {
     boolean Arrested;
 
-    Grandpa() {
-
-    }
-
     public void report(BattleGround tempBat) {
         arrest(tempBat);
         if(Arrested)
-            System.out.println("Mayday, mayday!");
+            System.out.println("爷爷所在位置" + this.getPosition().toString() + "在怪物控制范围内，请速去救援！");
         else
-            System.out.println("C'est la guerre, Attaque!");
+            System.out.println("爷爷发动技能\"葫芦攻势\"，其所在位置" + this.getPosition().toString() + "周围两格的葫芦娃受到增益");
+        System.out.println();
     }
 
     private void arrest(BattleGround tempBat) {

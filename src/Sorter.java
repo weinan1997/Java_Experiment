@@ -1,3 +1,3 @@
 public interface Sorter {
-    public void sort(Creature[] creatures);
+    public void sort(Queue queue);
 }

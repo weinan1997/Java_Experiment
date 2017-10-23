@@ -11,9 +11,13 @@ public class Calabash extends Creature{
     }
 
     public void report() {
-
+        System.out.println(this.toString());
     }
 
+    @Override
+    public String toString() {
+        return this.seniority.toString() + "(" +this.color.toString() + ")" + " @" + this.getPosition().toString();
+    }
     @Override
     public boolean Greater(Creature brother) {
         if(brother instanceof Calabash)

@@ -2,8 +2,9 @@ import java.util.List;
 
 public class QuickSort implements Sorter{
     @Override
-    public void sort(Creature[] creatures) {
-
+    public void sort(Queue queue) {
+        Creature[] creatures = queue.getCreatures();
+        Qsort(creatures,0, creatures.length);
     }
 
     private int Partition(Creature[] creatures, int s, int t) {
@@ -13,16 +14,16 @@ public class QuickSort implements Sorter{
                 i++;
                 if(i == j)
                     continue;
-                Position temp = creatures[i].getPosition();
-                creatures[i].setPosition(creatures[j].getPosition());
-                creatures[j].setPosition(temp);
+                Creature temp = creatures[i];
+                creatures[i] = creatures[j];
+                creatures[j] = temp;
             }
         }
         if((i+1) == t)
             return (i+1);
-        Position temp = creatures[i+1].getPosition();
-        creatures[i+1].setPosition(creatures[t].getPosition());
-        creatures[t].setPosition(temp);
+        Creature temp = creatures[i+1];
+        creatures[i+1] = creatures[t];
+        creatures[t] = temp;
         return (i+1);
     }
 
