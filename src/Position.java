@@ -1,18 +1,14 @@
 public class Position implements Comparable<Position>{
     private int x;
     private int y;
-    private Creature creature = null;
+    private Creature creature;
+    private String figure = "🌶";
+    private boolean empty;
     Position(int x, int y, Creature creature) {
         this.x = x;
         this.y = y;
         this.creature = creature;
-    }
-    Position(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-    Position(Creature creature) {
-        this.creature = creature;
+        this.empty = true;
     }
     public int getX() {
         return this.x;
@@ -26,18 +22,24 @@ public class Position implements Comparable<Position>{
     public void setY(int y) {
         this.y = y;
     }
+    public void setEmpty() {
+        this.empty = false;
+    }
+    public boolean getEmpty() {
+        return this.empty;
+    }
     public Creature getCreature() {
         return this.creature;
     }
     public void setCreature(Creature creature) {
         this.creature = creature;
+        this.figure = creature.getFigure();
+        this.setEmpty();
     }
-    public boolean isEmpty() {
-        if(this.creature == null)
-            return true;
-        else
-            return false;
+    public String getFigure() {
+        return figure;
     }
+
 
     @Override
     public int compareTo(Position position) {

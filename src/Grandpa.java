@@ -1,5 +1,8 @@
 public class Grandpa extends Creature {
     boolean Arrested;
+    Grandpa() {
+        this.setFigure("👴");
+    }
 
     public void report(BattleGround tempBat) {
         arrest(tempBat);

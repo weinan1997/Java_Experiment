@@ -1,4 +1,7 @@
 public class Minion extends Creature {
+    Minion() {
+        this.setFigure("🐸");
+    }
     @Override
     public void report() {
         System.out.println(this.toString());

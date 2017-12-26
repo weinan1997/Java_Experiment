@@ -1,4 +1,7 @@
 public class Scorpion extends Creature {
+    Scorpion() {
+        this.setFigure("🦂");
+    }
     @Override
     public void report() {
         System.out.println(this.toString());
