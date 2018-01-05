@@ -1,6 +1,7 @@
 public class Scorpion extends Creature {
     Scorpion() {
         this.setFigure("🦂");
+        this.setImage("scorpion.png");
     }
     @Override
     public void report() {

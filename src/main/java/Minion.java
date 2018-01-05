@@ -1,6 +1,7 @@
 public class Minion extends Creature {
     Minion() {
         this.setFigure("🐸");
+        this.setImage("minion.png");
     }
     @Override
     public void report() {

@@ -1,10 +1,11 @@
 public class Calabash extends Creature{
     private COLOR color;
     private SENIORITY seniority;
-    Calabash(COLOR color, SENIORITY seniority) {
+    Calabash(COLOR color, SENIORITY seniority, String url) {
         this.color = color;
         this.seniority = seniority;
         this.setFigure("🍌");
+        this.setImage(url);
     }
 
     public SENIORITY getSeniority() {
