@@ -9,13 +9,15 @@ public class Field extends JPanel {
     private int width;
     private int height;
     private int tileLength;
-    private final int N = 15;
+    private int N = 15;
     private ArrayList<Tile> tiles = new ArrayList<>();
     private ArrayList<Creature> creatures = new ArrayList<>();
-
     private boolean completed = false;
 
-    Field(){
+    public static final String moveLock = "Move lock";
+
+    Field(int n){
+        N = n;
         addKeyListener(new TAdapter());
         setFocusable(true);
         initTiles();
@@ -65,7 +67,7 @@ public class Field extends JPanel {
 
             Creature temp = creatures.get(i);
 
-            g.drawImage(temp.getImage(), temp.getPosition().getX() * tileLength, temp.getPosition().getY() * tileLength, this);
+            g.drawImage(temp.getImage(), temp.getPosition().getY() * tileLength, temp.getPosition().getX() * tileLength, this);
 
             if (completed) {
                 g.setColor(new Color(0, 0, 0));
@@ -89,6 +91,12 @@ public class Field extends JPanel {
 
             int key = e.getKeyCode();
 
+            if(key == KeyEvent.VK_SPACE) {
+                for (int i = 0; i < creatures.size(); i++)
+                    new Thread(creatures.get(i)).start();
+            }
+            else if(key == KeyEvent.VK_R)
+                restartLevel();
             repaint();
         }
     }

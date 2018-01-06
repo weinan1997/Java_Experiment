@@ -6,15 +6,23 @@ public class GraphicBG {
     private List<Creature> monsters = new ArrayList<>();
     private List<Creature> brothers = new ArrayList<>();
 
+    private static Field field;
+
+    public static Field getField() {
+        return field;
+    }
+
+    private final int N = 15;
+
     GraphicBG() {
         initBattle(monsters, brothers);
-        BattleGround battle1 = new BattleGround(15, monsters, brothers);
+        BattleGround battle1 = new BattleGround(N, monsters, brothers);
         System.out.println("Round 1:");
         battle1.ChangShe(brothers);
         battle1.YanXing(monsters);
         battle1.showBattleGround();
 
-        Field field = new Field();
+        field = new Field(N);
         field.addCreatures(monsters);
         field.addCreatures(brothers);
         Ground ground = new Ground(field);

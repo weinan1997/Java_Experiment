@@ -4,6 +4,15 @@ import java.io.IOException;
 import java.net.URL;
 
 public class Tile extends Position {
+    private BufferedImage image;
+
+    public BufferedImage getImage() {
+        return image;
+    }
+    public void setImage(BufferedImage image) {
+        this.image = image;
+    }
+
     Tile() {
         URL loc = this.getClass().getClassLoader().getResource("tile 2.png");
         BufferedImage i = null;

@@ -1,14 +1,10 @@
-import java.awt.image.BufferedImage;
-
 public class Position implements Comparable<Position>{
     private int x;
     private int y;
     private Creature creature;
     private String figure = "🌶";
-    private BufferedImage image;
     private boolean empty;
     Position(){
-
     }
     Position(int x, int y){
         this.x = x;
@@ -21,13 +17,6 @@ public class Position implements Comparable<Position>{
         this.y = y;
         this.creature = creature;
         this.empty = (creature == null);
-    }
-
-    public BufferedImage getImage() {
-        return image;
-    }
-    public void setImage(BufferedImage image) {
-        this.image = image;
     }
 
     public int getX() {
@@ -43,9 +32,6 @@ public class Position implements Comparable<Position>{
         this.y = y;
     }
 
-    public void setEmpty() {
-        this.empty = false;
-    }
     public boolean getEmpty() {
         return this.empty;
     }
@@ -56,7 +42,13 @@ public class Position implements Comparable<Position>{
     public void setCreature(Creature creature) {
         this.creature = creature;
         this.figure = creature.getFigure();
-        this.setEmpty();
+        this.empty = false;
+    }
+
+    public void setNull() {
+        this.creature = null;
+        this.figure = "🌶";
+        this.empty = true;
     }
 
     public String getFigure() {

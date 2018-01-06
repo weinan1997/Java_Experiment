@@ -2,9 +2,9 @@ import java.util.List;
 import java.util.Random;
 
 public class BattleGround {
-    private Position maps[][];      //a map that is created for fighting
+    private static Position maps[][];      //a map that is created for fighting
     //When BattleGround created, the map will be initialized
-    private int N;      //size of battleground
+    private static int N = 15;      //size of battleground
     private Calabash[] brothers;        //HuLu brothers
     /*
     BattleGround(int n) {
@@ -15,12 +15,20 @@ public class BattleGround {
     }
     */
 
-    public int getN() {
+    public static int getN() {
         return N;
     }
 
-    public Position[][] getMaps() {
+    public static Position[][] getMaps() {
         return maps;
+    }
+
+    public static void setPosition(int x, int y, Position t) {
+        maps[x][y] = t;
+    }
+
+    public static Position getPosition(int x,int y) {
+        return maps[x][y];
     }
 
     BattleGround()
