@@ -6,6 +6,8 @@ public class Calabash extends Creature{
         this.seniority = seniority;
         this.setFigure("🍌");
         this.setImage(url);
+        this.strength = new java.util.Random().nextInt(100);
+        this.camp = CAMP.JUSTICE;
     }
 
     public SENIORITY getSeniority() {

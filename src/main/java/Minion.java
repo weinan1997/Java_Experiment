@@ -2,6 +2,8 @@ public class Minion extends Creature {
     Minion() {
         this.setFigure("🐸");
         this.setImage("minion.png");
+        this.strength = new java.util.Random().nextInt(100);
+        this.camp = CAMP.EVIL;
     }
     @Override
     public void report() {

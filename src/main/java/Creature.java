@@ -14,6 +14,13 @@ public class Creature implements Runnable{
     private Position position;
     private String figure = "🌭";
     private BufferedImage image;
+    protected double strength;
+    protected CAMP camp;
+    private boolean alive = true;
+
+    public boolean isAlive() {
+        return alive;
+    }
 
     public void setPosition(Position position) {
         this.position = position;
@@ -43,6 +50,13 @@ public class Creature implements Runnable{
         return image;
     }
 
+    private boolean combat(Creature c1, Creature c2) {
+        double winProbability = c1.strength / (c1.strength + c2.strength);
+        if(Math.random() >= winProbability)
+            return true;
+        return false;
+    }
+
     public boolean move(int x, int y) {
         Position p = this.getPosition();
         int nx = p.getX() + x;
@@ -50,8 +64,24 @@ public class Creature implements Runnable{
         if(nx < 0 || nx >= BattleGround.getN() || ny < 0 || ny >= BattleGround.getN())
             return false;
         Position newPosition = BattleGround.getPosition(nx, ny);
-        if(!newPosition.getEmpty())
-            return false;
+        if(!newPosition.getEmpty()) {
+            Creature opponent = newPosition.getCreature();
+            if(this.camp == opponent.camp)
+                return false;
+            else {
+                boolean combatResult = combat(this, opponent);
+                if(combatResult) {
+                    newPosition.getCreature().alive = false;
+                    newPosition.setNull();
+                }
+                else {
+                    this.alive = false;
+                    p.setNull();
+                    BattleGround.setPosition(p.getX(), p.getY(), p);
+                    return true;
+                }
+            }
+        }
         this.setPosition(newPosition);
         newPosition.setCreature(this);
         BattleGround.setPosition(nx, ny, newPosition);
@@ -68,20 +98,43 @@ public class Creature implements Runnable{
             case RIGHT: return move(0, 1);
             default: return false;
         }
+    }
 
-
+    private DIRECTION findEnemy() {
+        Position[][] maps = BattleGround.getMaps();
+        Position p = this.getPosition();
+        int N = BattleGround.getN();
+        int x = p.getX();
+        int y = p.getY();
+        for(int i = 0; i < N; i++) {
+            if(!maps[i][y].getEmpty() && maps[i][y].getCreature().camp != this.camp) {
+                if(i < x)
+                    return DIRECTION.UP;
+                else
+                    return DIRECTION.DOWN;
+            }
+        }
+        for(int j = 0; j < N; j++) {
+            if(!maps[x][j].getEmpty() && maps[x][j].getCreature().camp != this.camp) {
+                if(j < y)
+                    return DIRECTION.LEFT;
+                else
+                    return DIRECTION.RIGHT;
+            }
+        }
+        return (DIRECTION.values()[new Random().nextInt(4)]);
     }
 
     public void run() {
-        while (!Thread.interrupted()) {
+        while (!Thread.interrupted() && this.alive) {
             Random rand = new Random();
-            DIRECTION direction = DIRECTION.values()[rand.nextInt(4)];
+            //DIRECTION direction = DIRECTION.values()[rand.nextInt(4)];
+            DIRECTION direction = findEnemy();
             synchronized (Field.moveLock) {
-                while (!this.oneStepMove(direction))
-                    direction = DIRECTION.values()[rand.nextInt(4)];
+                this.oneStepMove(direction);
                 try {
 
-                    Thread.sleep(500);
+                    Thread.sleep(100);
                     GraphicBG.getField().repaint();
 
                 } catch (Exception e) {
@@ -94,4 +147,8 @@ public class Creature implements Runnable{
 
 enum DIRECTION {
     UP, DOWN, LEFT, RIGHT
+}
+
+enum CAMP {
+    JUSTICE, EVIL
 }

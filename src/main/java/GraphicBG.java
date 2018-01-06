@@ -3,8 +3,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GraphicBG {
-    private List<Creature> monsters = new ArrayList<>();
-    private List<Creature> brothers = new ArrayList<>();
+    static List<Creature> monsters = new ArrayList<>();
+    static List<Creature> brothers = new ArrayList<>();
 
     private static Field field;
 

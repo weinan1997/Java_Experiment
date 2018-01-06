@@ -2,6 +2,8 @@ public class Snake extends Creature {
     Snake() {
         this.setFigure("🐍");
         this.setImage("snake.png");
+        this.strength = new java.util.Random().nextInt(100);
+        this.camp = CAMP.EVIL;
     }
     @Override
     public void report() {

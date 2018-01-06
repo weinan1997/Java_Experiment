@@ -3,6 +3,8 @@ public class Grandpa extends Creature {
     Grandpa() {
         this.setFigure("👴");
         this.setImage("grandpa.png");
+        this.strength = new java.util.Random().nextInt(100);
+        this.camp = CAMP.JUSTICE;
     }
 
     public void report(BattleGround tempBat) {

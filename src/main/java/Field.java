@@ -11,10 +11,10 @@ public class Field extends JPanel {
     private int tileLength;
     private int N = 15;
     private ArrayList<Tile> tiles = new ArrayList<>();
-    private ArrayList<Creature> creatures = new ArrayList<>();
+    static ArrayList<Creature> creatures = new ArrayList<>();
     private boolean completed = false;
 
-    public static final String moveLock = "Move lock";
+    static final String moveLock = "Move lock";
 
     Field(int n){
         N = n;
@@ -63,9 +63,38 @@ public class Field extends JPanel {
             }
         }
 
+        int deadNumber = 0;
+        for (int i = 0; i < creatures.size() / 2; i++) {
+            if(!creatures.get(i).isAlive())
+                deadNumber++;
+        }
+        if(deadNumber == creatures.size() / 2 + 1) {
+            completed =true;
+            g.setColor(new Color(0, 0, 0));
+            g.drawString("Completed", 25, 20);
+            return;
+        }
+        deadNumber = 0;
+        for (int i = creatures.size() / 2 + 1; i < creatures.size(); i++) {
+            if(!creatures.get(i).isAlive())
+                deadNumber++;
+        }
+        if(deadNumber == creatures.size() / 2 + 1) {
+            completed =true;
+            g.setColor(new Color(0, 0, 0));
+            g.drawString("Completed", 25, 20);
+            return;
+        }
+
+
+
+
         for (int i = 0; i < creatures.size(); i++) {
 
             Creature temp = creatures.get(i);
+
+            if(!temp.isAlive())
+                continue;
 
             g.drawImage(temp.getImage(), temp.getPosition().getY() * tileLength, temp.getPosition().getX() * tileLength, this);
 
