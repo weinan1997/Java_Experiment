@@ -12,7 +12,9 @@ public class Field extends JPanel {
     private int N = 15;
     private ArrayList<Tile> tiles = new ArrayList<>();
     static ArrayList<Creature> creatures = new ArrayList<>();
-    private boolean completed = false;
+    static boolean completed = false;
+
+    private ArrayList<Thread> creaturesThreads = new ArrayList<>();
 
     static final String moveLock = "Move lock";
 
@@ -65,25 +67,27 @@ public class Field extends JPanel {
 
         int deadNumber = 0;
         for (int i = 0; i < creatures.size() / 2; i++) {
-            if(!creatures.get(i).isAlive())
+            if(!creatures.get(i).isAlive()) {
                 deadNumber++;
+                creaturesThreads.get(i).interrupt();
+            }
         }
-        if(deadNumber == creatures.size() / 2 + 1) {
-            completed =true;
+        if(deadNumber == creatures.size() / 2) {
+            completed = true;
             g.setColor(new Color(0, 0, 0));
             g.drawString("Completed", 25, 20);
-            return;
         }
         deadNumber = 0;
-        for (int i = creatures.size() / 2 + 1; i < creatures.size(); i++) {
-            if(!creatures.get(i).isAlive())
+        for (int i = creatures.size() / 2; i < creatures.size(); i++) {
+            if(!creatures.get(i).isAlive()) {
                 deadNumber++;
+                creaturesThreads.get(i).interrupt();
+            }
         }
-        if(deadNumber == creatures.size() / 2 + 1) {
-            completed =true;
+        if(deadNumber == creatures.size() / 2) {
+            completed = true;
             g.setColor(new Color(0, 0, 0));
             g.drawString("Completed", 25, 20);
-            return;
         }
 
 
@@ -103,6 +107,10 @@ public class Field extends JPanel {
                 g.drawString("Completed", 25, 20);
             }
         }
+
+        if (completed)
+            for (int i = 0; i < creaturesThreads.size(); i++)
+                creaturesThreads.get(i).interrupt();
     }
 
     @Override
@@ -121,8 +129,10 @@ public class Field extends JPanel {
             int key = e.getKeyCode();
 
             if(key == KeyEvent.VK_SPACE) {
-                for (int i = 0; i < creatures.size(); i++)
-                    new Thread(creatures.get(i)).start();
+                for (int i = 0; i < creatures.size(); i++) {
+                    creaturesThreads.add(new Thread(creatures.get(i)));
+                    creaturesThreads.get(i).start();
+                }
             }
             else if(key == KeyEvent.VK_R)
                 restartLevel();

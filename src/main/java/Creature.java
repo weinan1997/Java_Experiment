@@ -52,19 +52,23 @@ public class Creature implements Runnable{
 
     private boolean combat(Creature c1, Creature c2) {
         double winProbability = c1.strength / (c1.strength + c2.strength);
-        if(Math.random() >= winProbability)
+        if(Math.random() <= winProbability)
             return true;
         return false;
     }
 
     public boolean move(int x, int y) {
+        if (Field.completed == true)
+            return false;
+        if (!this.isAlive())
+            return false;
         Position p = this.getPosition();
         int nx = p.getX() + x;
         int ny = p.getY() + y;
         if(nx < 0 || nx >= BattleGround.getN() || ny < 0 || ny >= BattleGround.getN())
             return false;
         Position newPosition = BattleGround.getPosition(nx, ny);
-        if(!newPosition.getEmpty()) {
+        if(newPosition.getCreature() != null) {
             Creature opponent = newPosition.getCreature();
             if(this.camp == opponent.camp)
                 return false;
@@ -72,10 +76,12 @@ public class Creature implements Runnable{
                 boolean combatResult = combat(this, opponent);
                 if(combatResult) {
                     newPosition.getCreature().alive = false;
+                    newPosition.getCreature().setPosition(null);
                     newPosition.setNull();
                 }
                 else {
                     this.alive = false;
+                    this.setPosition(null);
                     p.setNull();
                     BattleGround.setPosition(p.getX(), p.getY(), p);
                     return true;
@@ -107,19 +113,31 @@ public class Creature implements Runnable{
         int x = p.getX();
         int y = p.getY();
         for(int i = 0; i < N; i++) {
-            if(!maps[i][y].getEmpty() && maps[i][y].getCreature().camp != this.camp) {
-                if(i < x)
-                    return DIRECTION.UP;
-                else
-                    return DIRECTION.DOWN;
+            try {
+                if (maps[i][y].getCreature() != null) {
+                    if (maps[i][y].getCreature().camp != this.camp) {
+                        if (i < x)
+                            return DIRECTION.UP;
+                        else
+                            return DIRECTION.DOWN;
+                    }
+                }
+            } catch (NullPointerException e) {
+                System.out.println("At (" + i + ", " + y + ") find empty creature");
             }
         }
         for(int j = 0; j < N; j++) {
-            if(!maps[x][j].getEmpty() && maps[x][j].getCreature().camp != this.camp) {
-                if(j < y)
-                    return DIRECTION.LEFT;
-                else
-                    return DIRECTION.RIGHT;
+            try {
+                if (maps[x][j].getCreature() != null) {
+                    if (maps[x][j].getCreature().camp != this.camp) {
+                        if (j < y)
+                            return DIRECTION.LEFT;
+                        else
+                            return DIRECTION.RIGHT;
+                    }
+                }
+            } catch (NullPointerException e) {
+                System.out.println("At (" + x + j + ") find empty creature");
             }
         }
         return (DIRECTION.values()[new Random().nextInt(4)]);
