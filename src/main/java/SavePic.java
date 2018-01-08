@@ -6,8 +6,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class SavePic {
-    public static int i = 0;
-    private static final String url = "src/main/resources/save/";
+    static int i = 0;
+    static final String url = "src/main/resources/save/";
 
     public static void savePic (JFrame jf) {
         if (i == 0) {
@@ -22,9 +22,9 @@ public class SavePic {
         BufferedImage image = new BufferedImage(jf.getWidth(),jf.getHeight(),BufferedImage.TYPE_INT_RGB);
         Graphics g = image.createGraphics();
         content.printAll(g);
-        File f = new File(url + i + ".jpg");
+        File f = new File(url + i + ".png");
         try {
-            ImageIO.write(image, "jpg", f);
+            ImageIO.write(image, "png", f);
         } catch (IOException e) {
             System.out.println("Failed to save the picture");
         }

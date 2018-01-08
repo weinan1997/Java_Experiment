@@ -14,7 +14,7 @@ public class Ground extends JFrame{
         add(field);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(field.getW(), field.getH());
+        setSize(Field.width, Field.height + 20);
         setLocationRelativeTo(null);
         setTitle("Ground");
     }
