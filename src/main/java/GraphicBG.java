@@ -14,7 +14,7 @@ public class GraphicBG {
         return field;
     }
 
-    private final int N = 13;
+    private final int N = 14;
 
     GraphicBG() {
         initBattle(monsters, brothers);

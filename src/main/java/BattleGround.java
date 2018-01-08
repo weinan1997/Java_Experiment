@@ -4,7 +4,7 @@ import java.util.Random;
 public class BattleGround {
     private static Position maps[][];      //a map that is created for fighting
     //When BattleGround created, the map will be initialized
-    private static int N = 13;      //size of battleground
+    private static int N = 14;      //size of battleground
     private Calabash[] brothers;        //HuLu brothers
     /*
     BattleGround(int n) {

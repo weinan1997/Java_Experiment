@@ -1,6 +1,10 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.awt.*;
 import java.util.List;
@@ -9,10 +13,12 @@ public class Field extends JPanel {
     private int width;
     private int height;
     private int tileLength;
-    private int N = 13;
+    private int N = 14;
     private ArrayList<Tile> tiles = new ArrayList<>();
     static ArrayList<Creature> creatures = new ArrayList<>();
     static boolean completed = false;
+
+    private boolean loginMode = true;
 
     static boolean toSave = false;
 
@@ -53,66 +59,76 @@ public class Field extends JPanel {
 
     public void buildWorld(Graphics g) {
         g.setColor(new Color(250, 240, 170));
-        g.fillRect(0, 0, this.getWidth(), this.getHeight());
+        g.fillRect(0, 0, width, height);
 
-        for (int i = 0; i < tiles.size(); i++) {
+        if (loginMode) {
+            URL loc = this.getClass().getClassLoader().getResource("Login.jpeg");
+            BufferedImage login = null;
+            try {
+                login = ImageIO.read(loc);
+            } catch (IOException e) {
+                System.out.println("Failed to load picture");
+            }
+            g.drawImage(login, 0, 0, this);
+        }
+        else {
+            for (int i = 0; i < tiles.size(); i++) {
 
-            Tile temp = tiles.get(i);
+                Tile temp = tiles.get(i);
 
-            g.drawImage(temp.getImage(), temp.getX(), temp.getY(), this);
+                g.drawImage(temp.getImage(), temp.getX(), temp.getY(), this);
 
-            if (completed) {
+                if (completed) {
+                    g.setColor(new Color(0, 0, 0));
+                    g.drawString("Completed", 25, 20);
+                }
+            }
+
+            int deadNumber = 0;
+            for (int i = 0; i < creatures.size() / 2; i++) {
+                if (!creatures.get(i).isAlive()) {
+                    deadNumber++;
+                    creaturesThreads.get(i).interrupt();
+                }
+            }
+            if (deadNumber == creatures.size() / 2) {
+                completed = true;
                 g.setColor(new Color(0, 0, 0));
                 g.drawString("Completed", 25, 20);
             }
-        }
-
-        int deadNumber = 0;
-        for (int i = 0; i < creatures.size() / 2; i++) {
-            if(!creatures.get(i).isAlive()) {
-                deadNumber++;
-                creaturesThreads.get(i).interrupt();
+            deadNumber = 0;
+            for (int i = creatures.size() / 2; i < creatures.size(); i++) {
+                if (!creatures.get(i).isAlive()) {
+                    deadNumber++;
+                    creaturesThreads.get(i).interrupt();
+                }
             }
-        }
-        if(deadNumber == creatures.size() / 2) {
-            completed = true;
-            g.setColor(new Color(0, 0, 0));
-            g.drawString("Completed", 25, 20);
-        }
-        deadNumber = 0;
-        for (int i = creatures.size() / 2; i < creatures.size(); i++) {
-            if(!creatures.get(i).isAlive()) {
-                deadNumber++;
-                creaturesThreads.get(i).interrupt();
-            }
-        }
-        if(deadNumber == creatures.size() / 2) {
-            completed = true;
-            g.setColor(new Color(0, 0, 0));
-            g.drawString("Completed", 25, 20);
-        }
-
-
-
-
-        for (int i = 0; i < creatures.size(); i++) {
-
-            Creature temp = creatures.get(i);
-
-            if(!temp.isAlive())
-                continue;
-
-            g.drawImage(temp.getImage(), temp.getPosition().getY() * tileLength, temp.getPosition().getX() * tileLength, this);
-
-            if (completed) {
+            if (deadNumber == creatures.size() / 2) {
+                completed = true;
                 g.setColor(new Color(0, 0, 0));
                 g.drawString("Completed", 25, 20);
             }
-        }
 
-        if (completed)
-            for (int i = 0; i < creaturesThreads.size(); i++)
-                creaturesThreads.get(i).interrupt();
+
+            for (int i = 0; i < creatures.size(); i++) {
+
+                Creature temp = creatures.get(i);
+
+                if (!temp.isAlive())
+                    continue;
+
+                g.drawImage(temp.getImage(), temp.getPosition().getY() * tileLength, temp.getPosition().getX() * tileLength, this);
+
+                if (completed) {
+                    g.setColor(new Color(0, 0, 0));
+                    g.drawString("Completed", 25, 20);
+                }
+            }
+
+            if (completed)
+                for (int i = 0; i < creaturesThreads.size(); i++)
+                    creaturesThreads.get(i).interrupt();
+        }
     }
 
     @Override
@@ -129,6 +145,8 @@ public class Field extends JPanel {
             }
 
             int key = e.getKeyCode();
+
+            loginMode = false;
 
             if(key == KeyEvent.VK_SPACE) {
                 if (toSave)
