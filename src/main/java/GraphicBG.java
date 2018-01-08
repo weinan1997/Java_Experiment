@@ -6,13 +6,15 @@ public class GraphicBG {
     static List<Creature> monsters = new ArrayList<>();
     static List<Creature> brothers = new ArrayList<>();
 
+    public static Ground ground;
+
     private static Field field;
 
     public static Field getField() {
         return field;
     }
 
-    private final int N = 15;
+    private final int N = 13;
 
     GraphicBG() {
         initBattle(monsters, brothers);
@@ -25,7 +27,7 @@ public class GraphicBG {
         field = new Field(N);
         field.addCreatures(monsters);
         field.addCreatures(brothers);
-        Ground ground = new Ground(field);
+        ground = new Ground(field);
         ground.setVisible(true);
     }
 

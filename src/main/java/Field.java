@@ -9,10 +9,12 @@ public class Field extends JPanel {
     private int width;
     private int height;
     private int tileLength;
-    private int N = 15;
+    private int N = 13;
     private ArrayList<Tile> tiles = new ArrayList<>();
     static ArrayList<Creature> creatures = new ArrayList<>();
     static boolean completed = false;
+
+    static boolean toSave = false;
 
     private ArrayList<Thread> creaturesThreads = new ArrayList<>();
 
@@ -129,6 +131,8 @@ public class Field extends JPanel {
             int key = e.getKeyCode();
 
             if(key == KeyEvent.VK_SPACE) {
+                if (toSave)
+                    SavePic.savePic(GraphicBG.ground);
                 for (int i = 0; i < creatures.size(); i++) {
                     creaturesThreads.add(new Thread(creatures.get(i)));
                     creaturesThreads.get(i).start();
@@ -136,6 +140,8 @@ public class Field extends JPanel {
             }
             else if(key == KeyEvent.VK_R)
                 restartLevel();
+            else if(key == KeyEvent.VK_S)
+                toSave = true;
             repaint();
         }
     }

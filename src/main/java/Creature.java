@@ -154,6 +154,10 @@ public class Creature implements Runnable{
 
                     Thread.sleep(100);
                     GraphicBG.getField().repaint();
+                    if (!Field.completed  && Field.toSave) {
+                        SavePic.i++;
+                        SavePic.savePic(GraphicBG.ground);
+                    }
 
                 } catch (Exception e) {
 
