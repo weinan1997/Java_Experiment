@@ -23,6 +23,11 @@ public class GraphicBG {
         battle1.ChangShe(brothers);
         battle1.YanXing(monsters);
         battle1.showBattleGround();
+        try {
+            SavePic.url = this.getClass().getClassLoader().getResource("save").toURI().getPath() + "/";
+        } catch (Exception e) {
+
+        }
 
         field = new Field(N);
         field.addCreatures(monsters);

@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class SavePic {
     static int i = 0;
-    static final String url = "src/main/resources/save/";
+    public static String url;
 
     public static void savePic (JFrame jf) {
         if (i == 0) {
